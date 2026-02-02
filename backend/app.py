@@ -212,7 +212,14 @@ def get_agent_job(job_id: str) -> dict[str, Any]:
 @app.post("/api/code/search", response_model=CodeSearchResponse)
 def code_search_endpoint(payload: CodeSearchRequest) -> CodeSearchResponse:
     try:
-        hits = search_code(Path(payload.path), payload.keywords, payload.max_hits)
+        hits = search_code(
+            payload.path,
+            payload.keywords,
+            payload.max_hits,
+            cache_root=settings.data_dir / "cache",
+        )
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     return CodeSearchResponse(hits=hits)

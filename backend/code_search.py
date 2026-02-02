@@ -1,14 +1,29 @@
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
+from urllib.parse import urlparse
+
+
+@dataclass(frozen=True)
+class GithubRepoRef:
+    owner: str
+    repo: str
+    branch: str | None
+    subpath: str | None
 
 
 def _rg_available() -> bool:
     return shutil.which("rg") is not None
+
+
+def _git_available() -> bool:
+    return shutil.which("git") is not None
 
 
 def _build_pattern(keywords: Iterable[str]) -> str:
@@ -16,9 +31,61 @@ def _build_pattern(keywords: Iterable[str]) -> str:
     return "|".join(escaped)
 
 
-def search_code(path: Path, keywords: list[str], max_hits: int) -> list[dict[str, str | int]]:
-    if not keywords:
-        return []
+def _is_github_url(value: str) -> bool:
+    parsed = urlparse(value)
+    if parsed.scheme not in {"http", "https"}:
+        return False
+    return parsed.netloc in {"github.com", "www.github.com"}
+
+
+def _parse_github_url(value: str) -> GithubRepoRef:
+    parsed = urlparse(value)
+    parts = [p for p in parsed.path.strip("/").split("/") if p]
+    if len(parts) < 2:
+        raise ValueError("invalid GitHub URL")
+    owner, repo = parts[0], parts[1]
+    if repo.endswith(".git"):
+        repo = repo[:-4]
+
+    branch = None
+    subpath = None
+    if len(parts) >= 4 and parts[2] in {"tree", "blob"}:
+        branch = parts[3]
+        if len(parts) > 4:
+            subpath = "/".join(parts[4:])
+
+    return GithubRepoRef(owner=owner, repo=repo, branch=branch, subpath=subpath)
+
+
+def _safe_repo_dir_name(ref: GithubRepoRef) -> str:
+    return re.sub(r"[^a-zA-Z0-9_.-]", "-", f"{ref.owner}_{ref.repo}")
+
+
+def _materialize_github_repo(ref: GithubRepoRef, cache_root: Path) -> Path:
+    if not _git_available():
+        raise RuntimeError("git is required for GitHub code search")
+
+    repo_root = cache_root / "repos"
+    repo_root.mkdir(parents=True, exist_ok=True)
+    repo_dir = repo_root / _safe_repo_dir_name(ref)
+
+    if repo_dir.exists():
+        if not (repo_dir / ".git").exists():
+            raise RuntimeError(f"cache path is not a git repo: {repo_dir}")
+        return repo_dir
+
+    clone_url = f"https://github.com/{ref.owner}/{ref.repo}.git"
+    cmd = ["git", "clone", "--depth", "1"]
+    if ref.branch:
+        cmd += ["--branch", ref.branch]
+    cmd += [clone_url, str(repo_dir)]
+    result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "git clone failed")
+    return repo_dir
+
+
+def _search_local(path: Path, keywords: list[str], max_hits: int) -> list[dict[str, str | int]]:
     if not path.exists():
         raise FileNotFoundError(f"code path not found: {path}")
 
@@ -44,7 +111,6 @@ def search_code(path: Path, keywords: list[str], max_hits: int) -> list[dict[str
                     hits.append({"file": file_path, "line": int(line_no), "text": text})
         return hits[:max_hits]
 
-    # Fallback: simple line scan
     for file_path in path.rglob("*"):
         if file_path.is_dir():
             continue
@@ -59,3 +125,23 @@ def search_code(path: Path, keywords: list[str], max_hits: int) -> list[dict[str
                     return hits
 
     return hits
+
+
+def search_code(
+    path: str | Path,
+    keywords: list[str],
+    max_hits: int,
+    cache_root: Path | None = None,
+) -> list[dict[str, str | int]]:
+    if not keywords:
+        return []
+
+    path_value = str(path)
+    if _is_github_url(path_value):
+        ref = _parse_github_url(path_value)
+        cache_root = cache_root or Path(os.path.expanduser("~/.logservice/cache"))
+        repo_dir = _materialize_github_repo(ref, cache_root)
+        target = repo_dir / ref.subpath if ref.subpath else repo_dir
+        return _search_local(target, keywords, max_hits)
+
+    return _search_local(Path(path_value), keywords, max_hits)

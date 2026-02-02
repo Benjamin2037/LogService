@@ -162,6 +162,7 @@ API Service -> Context Store -> Persist/Restore
 - Accept a local path; index using ripgrep or lightweight AST parsing.
 - Map log keywords to file/line hits; show snippets in UI.
 - Cache index per repo path with hash of file list.
+- Support GitHub URLs by cloning to local cache before search.
 
 ## 9. Local Persistence
 

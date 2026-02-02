@@ -59,3 +59,4 @@ pytest
 - Loki is the source of truth; LogService does not ingest or store raw logs.
 - Results are capped at 100 lines per response to protect clusters.
 - The UI is served from `/ui` by the backend.
+- Code search accepts local paths or GitHub URLs (cached under `~/.logservice/cache/repos`).
