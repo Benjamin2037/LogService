@@ -49,6 +49,15 @@ uvicorn backend.app:app --reload --port 8000
 ### 4) Open UI
 Visit `http://localhost:8000/ui`.
 
+## macOS Client
+```bash
+cd client-mac
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
+
 ## Tests
 ```bash
 pip install -r requirements-dev.txt

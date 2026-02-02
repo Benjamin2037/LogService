@@ -186,6 +186,7 @@ API Service -> Context Store -> Persist/Restore
 - Log viewer with highlight, copy, and export actions.
 - Skill manager: list, preview, apply, edit.
 - Agent panel: progress, steps, partial results.
+- macOS client: lightweight WebView wrapper connecting to local `http://127.0.0.1:8000/ui`.
 
 ## 11. Integration Framework
 - Config schema: `config/schema/cluster_config.schema.json`
