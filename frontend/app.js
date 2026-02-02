@@ -1,5 +1,6 @@
 const chat = document.getElementById("chat");
 const statusEl = document.getElementById("status");
+const timelineWindow = document.getElementById("timelineWindow");
 
 function clearEmptyState() {
   const empty = chat.querySelector(".empty-state");
@@ -62,6 +63,19 @@ function setRelativeRange(minutes) {
   const start = new Date(end.getTime() - minutes * 60 * 1000);
   document.getElementById("endTime").value = end.toISOString();
   document.getElementById("startTime").value = start.toISOString();
+  renderWindow(minutes / 60 * 100);
+}
+
+function renderWindow(widthPercent) {
+  timelineWindow.style.width = `${Math.min(60, Math.max(15, widthPercent))}%`;
+}
+
+function setEventWindow(iso) {
+  const end = new Date(iso);
+  const start = new Date(end.getTime() - 10 * 60 * 1000);
+  document.getElementById("endTime").value = end.toISOString();
+  document.getElementById("startTime").value = start.toISOString();
+  renderWindow(25);
 }
 
 async function runQuery() {
@@ -140,3 +154,11 @@ document.querySelectorAll("[data-range]").forEach((chip) => {
     }
   });
 });
+
+document.querySelectorAll("[data-event]").forEach((eventBtn) => {
+  eventBtn.addEventListener("click", () => {
+    setEventWindow(eventBtn.dataset.event);
+  });
+});
+
+renderWindow(25);

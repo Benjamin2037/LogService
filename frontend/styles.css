@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap");
 
 :root {
-  --bg: #f6f7fb;
+  --bg: #f4efe6;
   --panel: #ffffff;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --accent: #2563eb;
-  --accent-2: #0ea5e9;
-  --danger: #ef4444;
-  --border: #e5e7eb;
+  --text: #2b2a27;
+  --muted: #6b6760;
+  --accent: #1f4f5a;
+  --accent-2: #3a7ca5;
+  --danger: #c2412d;
+  --border: #e2d8c8;
 }
 
 * {
@@ -19,24 +19,23 @@ body {
   margin: 0;
   font-family: "Space Grotesk", sans-serif;
   color: var(--text);
-  background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.08), transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.08), transparent 45%),
+  background: radial-gradient(circle at 15% 20%, rgba(31, 79, 90, 0.08), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(58, 124, 165, 0.08), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(198, 142, 64, 0.08), transparent 45%),
     var(--bg);
   min-height: 100vh;
 }
 
-.bg-blobs {
+.bg-wash {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.08), transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.08), transparent 45%);
+  background: radial-gradient(circle at 20% 20%, rgba(31, 79, 90, 0.06), transparent 45%),
+    radial-gradient(circle at 70% 0%, rgba(58, 124, 165, 0.06), transparent 45%);
   z-index: -1;
 }
 
 .app {
-  max-width: 1100px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 48px 24px 64px;
   display: flex;
@@ -65,6 +64,7 @@ body {
   font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+  color: var(--accent);
 }
 
 .hero-pills {
@@ -101,7 +101,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 24px;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 40px rgba(31, 41, 55, 0.08);
 }
 
 .panel.compact {
@@ -113,6 +113,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  gap: 16px;
 }
 
 .panel-header h2 {
@@ -123,6 +124,65 @@ body {
   margin: 6px 0 0;
   color: var(--muted);
   font-size: 14px;
+}
+
+.timeline-panel {
+  padding-bottom: 28px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline-track {
+  position: relative;
+  height: 56px;
+  background: #faf7f1;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.timeline-window {
+  position: absolute;
+  height: 100%;
+  left: 20%;
+  background: rgba(31, 79, 90, 0.16);
+  border-right: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+
+.event {
+  position: absolute;
+  top: 8px;
+  transform: translateX(-50%);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.event:hover {
+  border-color: var(--accent);
+}
+
+.ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.timeline-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .step {
@@ -155,7 +215,7 @@ label {
 }
 
 input {
-  background: #f9fafb;
+  background: #faf7f1;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 12px;
@@ -182,8 +242,14 @@ input {
 }
 
 .chip:hover {
-  background: #eff6ff;
-  border-color: #bfdbfe;
+  background: rgba(31, 79, 90, 0.08);
+  border-color: var(--accent);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
 }
 
 .actions {
@@ -205,7 +271,7 @@ button {
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 10px 24px rgba(31, 79, 90, 0.2);
 }
 
 button.ghost {
@@ -225,7 +291,7 @@ button.ghost {
   border-radius: 16px;
   border: 1px dashed var(--border);
   color: var(--muted);
-  background: #f9fafb;
+  background: #faf7f1;
 }
 
 .message {
@@ -261,7 +327,7 @@ button.ghost {
   padding: 12px;
   border-radius: 14px;
   border: 1px solid var(--border);
-  background: #f9fafb;
+  background: #faf7f1;
 }
 
 .skill-card p {
