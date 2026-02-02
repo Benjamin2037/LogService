@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap");
 
 :root {
-  --bg: #0d1117;
-  --panel: rgba(16, 22, 32, 0.9);
-  --text: #f2f5f8;
-  --muted: #9aa3b2;
-  --accent: #f4c542;
-  --accent-2: #7bdff2;
-  --danger: #ff6b6b;
-  --border: rgba(255, 255, 255, 0.08);
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-2: #0ea5e9;
+  --danger: #ef4444;
+  --border: #e5e7eb;
 }
 
 * {
@@ -19,16 +19,19 @@ body {
   margin: 0;
   font-family: "Space Grotesk", sans-serif;
   color: var(--text);
-  background: radial-gradient(circle at top left, #1b2735, #0d1117 55%) no-repeat fixed;
+  background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.08), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.08), transparent 45%),
+    var(--bg);
   min-height: 100vh;
 }
 
 .bg-blobs {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(123, 223, 242, 0.15), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(244, 197, 66, 0.12), transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(120, 88, 242, 0.1), transparent 45%);
+  background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.08), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.08), transparent 45%);
   z-index: -1;
 }
 
@@ -58,7 +61,7 @@ body {
   padding: 6px 12px;
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff;
   font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -69,8 +72,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 24px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
 }
 
 .panel-header {
@@ -105,7 +107,7 @@ label {
 }
 
 input {
-  background: rgba(255, 255, 255, 0.04);
+  background: #f9fafb;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 12px;
@@ -125,18 +127,18 @@ button {
   padding: 10px 18px;
   font-weight: 600;
   background: var(--accent);
-  color: #121212;
+  color: #ffffff;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(244, 197, 66, 0.3);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
 }
 
 button.ghost {
-  background: transparent;
+  background: #ffffff;
   color: var(--text);
   border: 1px solid var(--border);
 }
@@ -151,7 +153,7 @@ button.ghost {
   padding: 14px 16px;
   border-radius: 16px;
   border: 1px solid var(--border);
-  background: rgba(15, 20, 30, 0.75);
+  background: #ffffff;
   animation: fadeIn 0.4s ease;
 }
 

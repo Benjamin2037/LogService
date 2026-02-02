@@ -29,12 +29,12 @@ Open `docs/ui_preview.html` in a browser for the full static preview.
 
 <table>
   <tr><th>Token</th><th>Color</th><th>Usage</th></tr>
-  <tr><td>Background</td><td><span style="display:inline-block;width:48px;height:16px;background:#0c1118;border:1px solid #2a2f3a;"></span> #0c1118</td><td>Page background</td></tr>
-  <tr><td>Panel</td><td><span style="display:inline-block;width:48px;height:16px;background:#111821;border:1px solid #2a2f3a;"></span> #111821</td><td>Cards/panels</td></tr>
-  <tr><td>Text</td><td><span style="display:inline-block;width:48px;height:16px;background:#f4f7fb;border:1px solid #2a2f3a;"></span> #f4f7fb</td><td>Primary text</td></tr>
-  <tr><td>Muted</td><td><span style="display:inline-block;width:48px;height:16px;background:#98a2b3;border:1px solid #2a2f3a;"></span> #98a2b3</td><td>Secondary text</td></tr>
-  <tr><td>Accent</td><td><span style="display:inline-block;width:48px;height:16px;background:#f7c948;border:1px solid #2a2f3a;"></span> #f7c948</td><td>Primary actions</td></tr>
-  <tr><td>Accent 2</td><td><span style="display:inline-block;width:48px;height:16px;background:#7bdff2;border:1px solid #2a2f3a;"></span> #7bdff2</td><td>Status accents</td></tr>
+  <tr><td>Background</td><td><span style="display:inline-block;width:48px;height:16px;background:#f6f7fb;border:1px solid #e5e7eb;"></span> #f6f7fb</td><td>Page background</td></tr>
+  <tr><td>Panel</td><td><span style="display:inline-block;width:48px;height:16px;background:#ffffff;border:1px solid #e5e7eb;"></span> #ffffff</td><td>Cards/panels</td></tr>
+  <tr><td>Text</td><td><span style="display:inline-block;width:48px;height:16px;background:#1f2937;border:1px solid #e5e7eb;"></span> #1f2937</td><td>Primary text</td></tr>
+  <tr><td>Muted</td><td><span style="display:inline-block;width:48px;height:16px;background:#6b7280;border:1px solid #e5e7eb;"></span> #6b7280</td><td>Secondary text</td></tr>
+  <tr><td>Accent</td><td><span style="display:inline-block;width:48px;height:16px;background:#2563eb;border:1px solid #e5e7eb;"></span> #2563eb</td><td>Primary actions</td></tr>
+  <tr><td>Accent 2</td><td><span style="display:inline-block;width:48px;height:16px;background:#0ea5e9;border:1px solid #e5e7eb;"></span> #0ea5e9</td><td>Status accents</td></tr>
 </table>
 
 ## Quick Start (Local)
