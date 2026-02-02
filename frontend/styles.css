@@ -126,6 +126,62 @@ body {
   font-size: 14px;
 }
 
+.mode-switch {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+}
+
+.mode-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+body[data-mode="timeline"] .mode-btn[data-mode="timeline"],
+body[data-mode="guided"] .mode-btn[data-mode="guided"],
+body[data-mode="hybrid"] .mode-btn[data-mode="hybrid"] {
+  background: rgba(31, 79, 90, 0.12);
+  color: var(--accent);
+}
+
+.mode-only-guided,
+.mode-only-hybrid,
+.mode-only-timeline {
+  display: none;
+}
+
+body[data-mode="timeline"] .mode-only-timeline {
+  display: block;
+}
+
+body[data-mode="guided"] .mode-only-guided {
+  display: block;
+}
+
+body[data-mode="hybrid"] .mode-only-hybrid {
+  display: block;
+}
+
+body[data-mode="guided"] .timeline-panel {
+  display: none;
+}
+
+body[data-mode="guided"] .hero .badge {
+  content: "";
+}
+
+body[data-mode="guided"] .hero p {
+  content: "";
+}
+
 .timeline-panel {
   padding-bottom: 28px;
 }
@@ -198,6 +254,10 @@ body {
 .step-title {
   font-weight: 600;
   margin-bottom: 10px;
+}
+
+body[data-mode="timeline"] .step-title {
+  display: none;
 }
 
 .grid {

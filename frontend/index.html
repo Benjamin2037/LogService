@@ -6,7 +6,7 @@
     <title>LogService</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-mode="timeline">
     <div class="bg-wash"></div>
     <main class="app">
       <header class="hero">
@@ -24,7 +24,8 @@
         <div class="panel-header">
           <div>
             <h2>Incident Timeline</h2>
-            <p class="helper">Drag or click events to set the time window.</p>
+            <p class="helper mode-only-timeline">Drag or click events to set the time window.</p>
+            <p class="helper mode-only-hybrid">Pick a window, then refine with guided inputs.</p>
           </div>
           <div class="timeline-actions">
             <button class="chip" data-range="15">Last 15m</button>
@@ -52,63 +53,78 @@
 
       <section class="layout">
         <div class="left-col">
-          <section class="panel">
+          <section class="panel filters-panel">
             <div class="panel-header">
               <div>
-                <h2>Filters</h2>
-                <p class="helper">Keep it minimal. We only ask for what changes the timeline.</p>
+                <h2>Guided Filters</h2>
+                <p class="helper mode-only-guided">Follow the steps. We only ask for what changes the result.</p>
+                <p class="helper mode-only-timeline">Minimal inputs for timeline-driven search.</p>
+                <p class="helper mode-only-hybrid">Timeline + guided inputs for precision.</p>
+              </div>
+              <div class="mode-switch">
+                <button class="mode-btn" data-mode="timeline">Timeline</button>
+                <button class="mode-btn" data-mode="guided">Guided</button>
+                <button class="mode-btn" data-mode="hybrid">Hybrid</button>
               </div>
             </div>
 
-            <label>
-              Cluster ID
-              <input id="clusterId" placeholder="us-east-1-f02" />
-            </label>
-            <label>
-              Cluster Config Path
-              <input id="configPath" placeholder="/path/to/cluster.json" />
-            </label>
-
-            <div class="divider"></div>
-
-            <label>
-              Components (comma)
-              <input id="components" placeholder="pd,tikv" />
-            </label>
-            <div class="chips" aria-label="component presets">
-              <button class="chip" data-component="pd">PD</button>
-              <button class="chip" data-component="tidb">TiDB</button>
-              <button class="chip" data-component="tikv">TiKV</button>
-              <button class="chip" data-component="tiflash">TiFlash</button>
-              <button class="chip" data-component="tiflow">TiFlow</button>
-              <button class="chip" data-component="ticdc">TiCDC</button>
+            <div class="step">
+              <div class="step-title">Step 1 · Target</div>
+              <div class="grid">
+                <label>
+                  Cluster ID
+                  <input id="clusterId" placeholder="us-east-1-f02" />
+                </label>
+                <label>
+                  Cluster Config Path
+                  <input id="configPath" placeholder="/path/to/cluster.json" />
+                </label>
+              </div>
             </div>
 
-            <div class="divider"></div>
-
-            <label>
-              Keywords (comma)
-              <input id="keywords" placeholder="leader, ready" />
-            </label>
-            <div class="chips" aria-label="keyword suggestions">
-              <button class="chip" data-keyword="leader">leader</button>
-              <button class="chip" data-keyword="ready">ready</button>
-              <button class="chip" data-keyword="campaign">campaign</button>
-              <button class="chip" data-keyword="timeout">timeout</button>
-              <button class="chip" data-keyword="slow">slow</button>
+            <div class="step">
+              <div class="step-title">Step 2 · Scope</div>
+              <label>
+                Components (comma)
+                <input id="components" placeholder="pd,tikv" />
+              </label>
+              <div class="chips" aria-label="component presets">
+                <button class="chip" data-component="pd">PD</button>
+                <button class="chip" data-component="tidb">TiDB</button>
+                <button class="chip" data-component="tikv">TiKV</button>
+                <button class="chip" data-component="tiflash">TiFlash</button>
+                <button class="chip" data-component="tiflow">TiFlow</button>
+                <button class="chip" data-component="ticdc">TiCDC</button>
+              </div>
             </div>
 
-            <div class="divider"></div>
+            <div class="step">
+              <div class="step-title">Step 3 · Keywords</div>
+              <label>
+                Keywords (comma)
+                <input id="keywords" placeholder="leader, ready" />
+              </label>
+              <div class="chips" aria-label="keyword suggestions">
+                <button class="chip" data-keyword="leader">leader</button>
+                <button class="chip" data-keyword="ready">ready</button>
+                <button class="chip" data-keyword="campaign">campaign</button>
+                <button class="chip" data-keyword="timeout">timeout</button>
+                <button class="chip" data-keyword="slow">slow</button>
+              </div>
+            </div>
 
-            <div class="grid">
-              <label>
-                Start (ISO)
-                <input id="startTime" placeholder="2026-02-02T08:00:00Z" />
-              </label>
-              <label>
-                End (ISO)
-                <input id="endTime" placeholder="2026-02-02T08:15:00Z" />
-              </label>
+            <div class="step">
+              <div class="step-title">Step 4 · Time Range</div>
+              <div class="grid">
+                <label>
+                  Start (ISO)
+                  <input id="startTime" placeholder="2026-02-02T08:00:00Z" />
+                </label>
+                <label>
+                  End (ISO)
+                  <input id="endTime" placeholder="2026-02-02T08:15:00Z" />
+                </label>
+              </div>
             </div>
 
             <div class="actions">

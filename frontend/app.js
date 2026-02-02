@@ -78,6 +78,10 @@ function setEventWindow(iso) {
   renderWindow(25);
 }
 
+function setMode(mode) {
+  document.body.dataset.mode = mode;
+}
+
 async function runQuery() {
   const payload = readInputs();
   appendMessage("user", "Query", JSON.stringify(payload, null, 2));
@@ -161,4 +165,11 @@ document.querySelectorAll("[data-event]").forEach((eventBtn) => {
   });
 });
 
+document.querySelectorAll(".mode-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    setMode(btn.dataset.mode);
+  });
+});
+
+setMode("timeline");
 renderWindow(25);
