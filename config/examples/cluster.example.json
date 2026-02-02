@@ -1,0 +1,47 @@
+{
+  "cluster_id": "us-east-1-f02",
+  "display_name": "prod-us-east",
+  "loki": {
+    "base_url": "https://loki.example.com",
+    "tenant_header": "X-Scope-OrgID",
+    "tenant": "tidb-cloud",
+    "auth": {
+      "type": "token",
+      "token_ref": "keychain:logservice/loki"
+    },
+    "headers": {
+      "X-Requested-By": "logservice"
+    },
+    "query_params": {
+      "direction": "backward"
+    },
+    "proxy": "http://proxy.example.com:8080"
+  },
+  "metadata": {
+    "provider": "http",
+    "endpoint": "https://metadata.example.com/v1/clusters/us-east-1-f02",
+    "auth_ref": "keychain:logservice/metadata",
+    "timeout_ms": 2000,
+    "cache_ttl_s": 300
+  },
+  "labels": {
+    "cluster": "cluster",
+    "namespace": "namespace",
+    "pod": "pod",
+    "component": "component",
+    "instance": "instance",
+    "job": "job",
+    "container": "container"
+  },
+  "components": ["tidb", "pd", "tikv", "tiflash", "tiflow", "ticdc"],
+  "rate_limit": {
+    "min_interval_seconds": 10,
+    "burst": 1,
+    "max_lines": 100
+  },
+  "network": {
+    "mode": "proxy",
+    "proxy": "http://proxy.example.com:8080",
+    "no_proxy": ["127.0.0.1", "localhost", ".svc", ".cluster.local"]
+  }
+}

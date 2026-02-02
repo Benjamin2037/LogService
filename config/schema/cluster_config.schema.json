@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ClusterConfig",
+  "type": "object",
+  "required": ["cluster_id", "loki", "labels", "components"],
+  "properties": {
+    "cluster_id": {"type": "string"},
+    "display_name": {"type": "string"},
+    "loki": {
+      "type": "object",
+      "required": ["base_url"],
+      "properties": {
+        "base_url": {"type": "string"},
+        "tenant_header": {"type": "string"},
+        "tenant": {"type": "string"},
+        "auth": {"$ref": "#/definitions/auth"},
+        "headers": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        },
+        "query_params": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        },
+        "proxy": {"type": "string"}
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["provider"],
+      "properties": {
+        "provider": {"type": "string", "enum": ["static", "http", "k8s", "cmdb"]},
+        "endpoint": {"type": "string"},
+        "auth_ref": {"type": "string"},
+        "timeout_ms": {"type": "integer", "minimum": 100},
+        "cache_ttl_s": {"type": "integer", "minimum": 0}
+      }
+    },
+    "labels": {
+      "type": "object",
+      "required": ["cluster", "namespace", "pod", "component"],
+      "properties": {
+        "cluster": {"type": "string"},
+        "namespace": {"type": "string"},
+        "pod": {"type": "string"},
+        "component": {"type": "string"},
+        "instance": {"type": "string"},
+        "job": {"type": "string"},
+        "container": {"type": "string"}
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["tidb", "pd", "tikv", "tiflash", "tiflow", "ticdc"]
+      }
+    },
+    "rate_limit": {
+      "type": "object",
+      "properties": {
+        "min_interval_seconds": {"type": "integer", "minimum": 1},
+        "burst": {"type": "integer", "minimum": 1},
+        "max_lines": {"type": "integer", "minimum": 1, "maximum": 100}
+      }
+    },
+    "network": {
+      "type": "object",
+      "properties": {
+        "proxy": {"type": "string"},
+        "no_proxy": {"type": "array", "items": {"type": "string"}},
+        "mode": {"type": "string", "enum": ["direct", "proxy", "bastion", "vpn"]}
+      }
+    }
+  },
+  "definitions": {
+    "auth": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string", "enum": ["token", "basic", "oauth", "sso", "none"]},
+        "token_ref": {"type": "string"},
+        "username": {"type": "string"},
+        "password_ref": {"type": "string"},
+        "audience": {"type": "string"},
+        "scope": {"type": "string"},
+        "client_id": {"type": "string"},
+        "client_secret_ref": {"type": "string"},
+        "sso_profile": {"type": "string"}
+      }
+    }
+  }
+}
