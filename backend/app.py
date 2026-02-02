@@ -24,6 +24,7 @@ from .models import (
     SkillExtractRequest,
 )
 from .rate_limit import TokenBucketLimiter
+from .redaction import Redactor
 from .skills import SkillManager
 from .storage import LocalStore, StorageError
 
@@ -34,6 +35,8 @@ resolver = MetadataResolver(store)
 skill_manager = SkillManager(store)
 schema_path = Path(__file__).resolve().parents[1] / "config/schema/cluster_config.schema.json"
 frontend_dir = Path(__file__).resolve().parents[1] / "frontend"
+redaction_path = settings.redaction_path or (settings.data_dir / "redaction.json")
+redactor = Redactor.from_file(redaction_path)
 
 app = FastAPI(title="LogService", version="0.1.0")
 
@@ -131,6 +134,12 @@ def query_logs(payload: QueryRequest) -> QueryResponse:
     except httpx.HTTPError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
+    if settings.redact_enabled:
+        lines = [
+            LogLineModel(ts=item.ts, line=redactor.redact_text(item.line), labels=item.labels)
+            for item in lines
+        ]
+
     return QueryResponse(lines=lines, truncated=len(lines) >= payload.max_lines)
 
 
@@ -141,17 +150,24 @@ def export_logs(payload: ExportRequest) -> ExportResponse:
     timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     path = export_dir / f"logservice_export_{timestamp}.{payload.format}"
 
+    export_lines = payload.lines
+    if settings.redact_enabled:
+        export_lines = [
+            LogLineModel(ts=line.ts, line=redactor.redact_text(line.line), labels=line.labels)
+            for line in payload.lines
+        ]
+
     if payload.format == "json":
-        content = [line.model_dump() for line in payload.lines]
+        content = [line.model_dump() for line in export_lines]
         path.write_text(
             __import__("json").dumps(content, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
     elif payload.format == "markdown":
-        body = "\n".join(f\"{line.ts} {line.line}\" for line in payload.lines)
+        body = "\n".join(f\"{line.ts} {line.line}\" for line in export_lines)
         path.write_text(f\"```\\n{body}\\n```\\n\", encoding=\"utf-8\")
     else:
-        body = "\n".join(f\"{line.ts} {line.line}\" for line in payload.lines)
+        body = "\n".join(f\"{line.ts} {line.line}\" for line in export_lines)
         path.write_text(body, encoding=\"utf-8\")
 
     return ExportResponse(path=str(path))

@@ -15,6 +15,7 @@ Local-first Loki log capture and analysis service for TiDB Cloud components (tid
 - Test plan: `docs/test_plan.md`
 - Installation (macOS): `docs/install.md`
 - User Guide: `docs/user_guide.md`
+- Redaction Rules: `docs/redaction_rules.md`
 - Metadata/Auth framework: `docs/metadata_auth_framework.md`
 - Metadata/Auth inputs: `docs/metadata_auth_inputs.md`
 - Agent integration inputs: `docs/agent_integration_inputs.md`

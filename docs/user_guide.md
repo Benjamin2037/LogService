@@ -139,3 +139,4 @@ Supported formats: `text`, `json`, `markdown`.
 - Keep backend bound to `127.0.0.1`.
 - Store secrets only via encrypted local storage.
 - Avoid exporting raw logs with sensitive data.
+- Redaction rules: see `docs/redaction_rules.md`.
