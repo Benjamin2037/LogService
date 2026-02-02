@@ -22,11 +22,40 @@ Local-first Loki log capture and analysis service for TiDB Cloud components (tid
 - Schema: `config/schema/cluster_config.schema.json`
 - Example: `config/examples/cluster.example.json`
 
-## Quick Start (Docs-only)
-1) Review requirements and design in `docs/`.
-2) Fill out metadata and auth inputs.
-3) Validate config against the schema.
+## Quick Start (Local)
+
+### 1) Backend
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+```
+
+### 2) Environment
+```bash
+export LOGSERVICE_CONFIG=/path/to/cluster.json
+export LOGSERVICE_MASTER_KEY=$(python - <<'PY'
+from cryptography.fernet import Fernet
+print(Fernet.generate_key().decode())
+PY
+)
+```
+
+### 3) Run API
+```bash
+uvicorn backend.app:app --reload --port 8000
+```
+
+### 4) Open UI
+Visit `http://localhost:8000/ui`.
+
+## Tests
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
 
 ## Notes
 - Loki is the source of truth; LogService does not ingest or store raw logs.
 - Results are capped at 100 lines per response to protect clusters.
+- The UI is served from `/ui` by the backend.

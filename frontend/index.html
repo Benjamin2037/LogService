@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogService</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-blobs"></div>
+    <main class="app">
+      <header class="hero">
+        <div class="badge">Local-first Loki Console</div>
+        <h1>LogService</h1>
+        <p>Keyword-first log capture and analysis for TiDB Cloud components.</p>
+      </header>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Query Console</h2>
+          <span class="status" id="status">idle</span>
+        </div>
+        <div class="grid">
+          <label>
+            Cluster ID
+            <input id="clusterId" placeholder="us-east-1-f02" />
+          </label>
+          <label>
+            Components (comma)
+            <input id="components" placeholder="pd,tikv" />
+          </label>
+          <label>
+            Keywords (comma)
+            <input id="keywords" placeholder="leader, ready" />
+          </label>
+          <label>
+            Start (ISO)
+            <input id="startTime" placeholder="2026-02-02T08:00:00Z" />
+          </label>
+          <label>
+            End (ISO)
+            <input id="endTime" placeholder="2026-02-02T08:15:00Z" />
+          </label>
+          <label>
+            Cluster Config Path
+            <input id="configPath" placeholder="/path/to/cluster.json" />
+          </label>
+        </div>
+        <div class="actions">
+          <button id="runQuery">Run Query</button>
+          <button id="exportText" class="ghost">Export Text</button>
+        </div>
+      </section>
+
+      <section class="chat" id="chat"></section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
