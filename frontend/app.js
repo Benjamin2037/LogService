@@ -1,7 +1,15 @@
 const chat = document.getElementById("chat");
 const statusEl = document.getElementById("status");
 
+function clearEmptyState() {
+  const empty = chat.querySelector(".empty-state");
+  if (empty) {
+    empty.remove();
+  }
+}
+
 function appendMessage(type, title, content) {
+  clearEmptyState();
   const msg = document.createElement("div");
   msg.className = `message ${type}`;
   msg.innerHTML = `<strong>${title}</strong>${content ? `<pre>${content}</pre>` : ""}`;
@@ -33,10 +41,33 @@ function readInputs() {
   };
 }
 
+function setStatus(value) {
+  statusEl.textContent = value;
+}
+
+function appendToInput(id, value) {
+  const input = document.getElementById(id);
+  const parts = input.value
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (!parts.includes(value)) {
+    parts.push(value);
+  }
+  input.value = parts.join(",");
+}
+
+function setRelativeRange(minutes) {
+  const end = new Date();
+  const start = new Date(end.getTime() - minutes * 60 * 1000);
+  document.getElementById("endTime").value = end.toISOString();
+  document.getElementById("startTime").value = start.toISOString();
+}
+
 async function runQuery() {
   const payload = readInputs();
   appendMessage("user", "Query", JSON.stringify(payload, null, 2));
-  statusEl.textContent = "running";
+  setStatus("running");
 
   try {
     const res = await fetch("/api/query", {
@@ -58,13 +89,13 @@ async function runQuery() {
   } catch (err) {
     appendMessage("system", "Error", err.message || "request failed");
   } finally {
-    statusEl.textContent = "idle";
+    setStatus("idle");
   }
 }
 
 async function exportText() {
   appendMessage("user", "Export", "Requesting export...");
-  statusEl.textContent = "exporting";
+  setStatus("exporting");
 
   const lastSystem = Array.from(document.querySelectorAll(".message.system pre")).pop();
   const lines = lastSystem
@@ -82,9 +113,30 @@ async function exportText() {
   } catch (err) {
     appendMessage("system", "Export Error", err.message || "export failed");
   } finally {
-    statusEl.textContent = "idle";
+    setStatus("idle");
   }
 }
 
 document.getElementById("runQuery").addEventListener("click", runQuery);
 document.getElementById("exportText").addEventListener("click", exportText);
+
+document.querySelectorAll("[data-component]").forEach((chip) => {
+  chip.addEventListener("click", () => {
+    appendToInput("components", chip.dataset.component);
+  });
+});
+
+document.querySelectorAll("[data-keyword]").forEach((chip) => {
+  chip.addEventListener("click", () => {
+    appendToInput("keywords", chip.dataset.keyword);
+  });
+});
+
+document.querySelectorAll("[data-range]").forEach((chip) => {
+  chip.addEventListener("click", () => {
+    const minutes = Number(chip.dataset.range || 0);
+    if (minutes > 0) {
+      setRelativeRange(minutes);
+    }
+  });
+});

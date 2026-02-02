@@ -26,7 +26,7 @@
         min-height: 100vh;
       }
       .container {
-        max-width: 1040px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 48px 24px 80px;
         display: grid;
@@ -57,6 +57,11 @@
         text-transform: uppercase;
         background: #ffffff;
       }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 24px;
+      }
       .panel {
         background: var(--card);
         border: 1px solid var(--border);
@@ -64,101 +69,83 @@
         padding: 24px;
         box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
       }
+      .panel.compact { padding: 20px; }
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 16px;
       }
-      .field {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        font-size: 13px;
-        color: var(--muted);
-      }
-      .field span {
-        color: var(--text);
-        font-size: 14px;
-      }
-      .actions {
-        display: flex;
-        gap: 12px;
-        margin-top: 18px;
-      }
-      .btn {
-        background: var(--accent);
-        color: #ffffff;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 12px;
-        font-weight: 600;
-      }
-      .btn.secondary {
-        background: #ffffff;
-        color: var(--text);
-        border: 1px solid var(--border);
-      }
-      .chat {
-        display: grid;
-        gap: 12px;
-      }
-      .message {
-        padding: 16px;
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        background: #ffffff;
-      }
+      .step { padding: 16px 0; border-top: 1px solid var(--border); }
+      .step:first-of-type { border-top: none; padding-top: 0; }
+      .step-title { font-weight: 600; margin-bottom: 10px; }
+      .chips { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+      .chip { background: #ffffff; border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; font-size: 12px; }
+      .actions { display: flex; gap: 12px; margin-top: 18px; }
+      .btn { background: var(--accent); color: #ffffff; border: none; padding: 10px 16px; border-radius: 12px; font-weight: 600; }
+      .btn.secondary { background: #ffffff; color: var(--text); border: 1px solid var(--border); }
+      .chat { display: grid; gap: 12px; }
+      .message { padding: 16px; border-radius: 16px; border: 1px solid var(--border); background: #ffffff; }
       .message.user { border-left: 4px solid var(--accent); }
       .message.system { border-left: 4px solid var(--accent-2); }
-      .message pre {
-        margin: 8px 0 0;
-        white-space: pre-wrap;
-        color: var(--muted);
-        font-family: "SF Mono", Menlo, monospace;
-        font-size: 12px;
-      }
-      .footer {
-        color: var(--muted);
-        font-size: 12px;
-      }
+      .message pre { margin: 8px 0 0; white-space: pre-wrap; color: var(--muted); font-family: "SF Mono", Menlo, monospace; font-size: 12px; }
+      .safety { color: var(--muted); font-size: 13px; }
+      @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="title">
-        <div class="badge">Loki Analysis Console</div>
+        <div class="badge">Human-first Loki Console</div>
         <h1>LogService UI Preview</h1>
-        <p>关键词 + 时间段驱动的日志分析界面（对话式交互 + 时间线）。</p>
+        <p>更友好的引导式交互：分步骤填写，给出建议与安全提醒。</p>
       </div>
 
-      <div class="panel">
-        <div class="grid">
-          <div class="field">Cluster ID<span>us-east-1-f02</span></div>
-          <div class="field">Components<span>pd, tikv</span></div>
-          <div class="field">Keywords<span>leader, ready</span></div>
-          <div class="field">Time Range<span>2026-01-28 14:10 ~ 14:25</span></div>
-          <div class="field">Config<span>/path/to/cluster.json</span></div>
+      <div class="layout">
+        <div>
+          <div class="panel">
+            <div class="step">
+              <div class="step-title">Step 1 · Target</div>
+              <div class="grid">
+                <div>Cluster ID: us-east-1-f02</div>
+                <div>Config: /path/to/cluster.json</div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-title">Step 2 · Scope</div>
+              <div class="chips">
+                <span class="chip">PD</span><span class="chip">TiDB</span><span class="chip">TiKV</span>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-title">Step 3 · Time Range</div>
+              <div class="chips"><span class="chip">Last 15m</span><span class="chip">Last 1h</span></div>
+            </div>
+            <div class="step">
+              <div class="step-title">Step 4 · Keywords</div>
+              <div class="chips"><span class="chip">leader</span><span class="chip">ready</span><span class="chip">campaign</span></div>
+            </div>
+            <div class="actions">
+              <button class="btn">Run Query</button>
+              <button class="btn secondary">Export</button>
+            </div>
+          </div>
         </div>
-        <div class="actions">
-          <button class="btn">Run Query</button>
-          <button class="btn secondary">Export</button>
+
+        <div>
+          <div class="panel">
+            <div class="chat">
+              <div class="message user">查询 PD leader ready 变慢原因，时间 14:10~14:25</div>
+              <div class="message system">
+                采集到 96 行日志，ready 延迟 3min~6min
+                <pre>[2026/01/28 06:19:16] API Service leader is ready to serve ...</pre>
+              </div>
+            </div>
+          </div>
+          <div class="panel compact">
+            <div class="safety">安全提示：100 行上限 + 冷却时间，避免对集群造成压力。</div>
+          </div>
         </div>
       </div>
-
-      <div class="chat">
-        <div class="message user">
-          查询 PD leader ready 变慢原因，时间 14:10~14:25
-        </div>
-        <div class="message system">
-          采集到 96 行日志，ready 延迟 3min~6min，leader 在 pd-0/standby/witness 间切换
-          <pre>[2026/01/28 06:19:16] API Service leader is ready to serve ...</pre>
-        </div>
-        <div class="message system">
-          技能建议：PD leader 迁移与 ready 变慢排查模板已生成（pd-leader-ready）
-        </div>
-      </div>
-
-      <div class="footer">This is a static preview for design review only.</div>
     </div>
   </body>
 </html>

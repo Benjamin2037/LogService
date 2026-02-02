@@ -10,49 +10,135 @@
     <div class="bg-blobs"></div>
     <main class="app">
       <header class="hero">
-        <div class="badge">Local-first Loki Console</div>
+        <div class="badge">Human-first Loki Console</div>
         <h1>LogService</h1>
-        <p>Keyword-first log capture and analysis for TiDB Cloud components.</p>
+        <p>Guided log search for TiDB Cloud components with safe limits and clear next steps.</p>
+        <div class="hero-pills">
+          <span class="pill" id="status">idle</span>
+          <span class="pill">max 100 lines</span>
+          <span class="pill">local-only</span>
+        </div>
       </header>
 
-      <section class="panel">
-        <div class="panel-header">
-          <h2>Query Console</h2>
-          <span class="status" id="status">idle</span>
+      <section class="layout">
+        <div class="left-col">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Guided Search</h2>
+                <p class="helper">Answer the steps below. We will cap results to keep the cluster safe.</p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 1 · Target</div>
+              <div class="grid">
+                <label>
+                  Cluster ID
+                  <input id="clusterId" placeholder="us-east-1-f02" />
+                </label>
+                <label>
+                  Cluster Config Path
+                  <input id="configPath" placeholder="/path/to/cluster.json" />
+                </label>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 2 · Scope</div>
+              <label>
+                Components (comma)
+                <input id="components" placeholder="pd,tikv" />
+              </label>
+              <div class="chips" aria-label="component presets">
+                <button class="chip" data-component="pd">PD</button>
+                <button class="chip" data-component="tidb">TiDB</button>
+                <button class="chip" data-component="tikv">TiKV</button>
+                <button class="chip" data-component="tiflash">TiFlash</button>
+                <button class="chip" data-component="tiflow">TiFlow</button>
+                <button class="chip" data-component="ticdc">TiCDC</button>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 3 · Time Range</div>
+              <div class="grid">
+                <label>
+                  Start (ISO)
+                  <input id="startTime" placeholder="2026-02-02T08:00:00Z" />
+                </label>
+                <label>
+                  End (ISO)
+                  <input id="endTime" placeholder="2026-02-02T08:15:00Z" />
+                </label>
+              </div>
+              <div class="chips" aria-label="time presets">
+                <button class="chip" data-range="15">Last 15m</button>
+                <button class="chip" data-range="30">Last 30m</button>
+                <button class="chip" data-range="60">Last 1h</button>
+                <button class="chip" data-range="180">Last 3h</button>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">Step 4 · Keywords</div>
+              <label>
+                Keywords (comma)
+                <input id="keywords" placeholder="leader, ready" />
+              </label>
+              <div class="chips" aria-label="keyword suggestions">
+                <button class="chip" data-keyword="leader">leader</button>
+                <button class="chip" data-keyword="ready">ready</button>
+                <button class="chip" data-keyword="campaign">campaign</button>
+                <button class="chip" data-keyword="timeout">timeout</button>
+                <button class="chip" data-keyword="slow">slow</button>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button id="runQuery">Run Query</button>
+              <button id="exportText" class="ghost">Export Text</button>
+            </div>
+          </section>
+
+          <section class="panel compact">
+            <h3>Suggested Skills</h3>
+            <div class="skills">
+              <div class="skill-card">
+                <strong>PD leader ready slowdown</strong>
+                <p>Focus on leader election, readiness gaps, and upgrade signals.</p>
+              </div>
+              <div class="skill-card">
+                <strong>Cluster timeout triage</strong>
+                <p>Correlate gateway SLA drops with component errors.</p>
+              </div>
+            </div>
+          </section>
         </div>
-        <div class="grid">
-          <label>
-            Cluster ID
-            <input id="clusterId" placeholder="us-east-1-f02" />
-          </label>
-          <label>
-            Components (comma)
-            <input id="components" placeholder="pd,tikv" />
-          </label>
-          <label>
-            Keywords (comma)
-            <input id="keywords" placeholder="leader, ready" />
-          </label>
-          <label>
-            Start (ISO)
-            <input id="startTime" placeholder="2026-02-02T08:00:00Z" />
-          </label>
-          <label>
-            End (ISO)
-            <input id="endTime" placeholder="2026-02-02T08:15:00Z" />
-          </label>
-          <label>
-            Cluster Config Path
-            <input id="configPath" placeholder="/path/to/cluster.json" />
-          </label>
-        </div>
-        <div class="actions">
-          <button id="runQuery">Run Query</button>
-          <button id="exportText" class="ghost">Export Text</button>
+
+        <div class="right-col">
+          <section class="panel">
+            <div class="panel-header">
+              <h2>Conversation</h2>
+            </div>
+            <div class="chat" id="chat">
+              <div class="empty-state">
+                <strong>Start with a question.</strong>
+                <p>Example: “Why did PD leader ready slow down at 14:10~14:25?”</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel compact">
+            <h3>Safety & Output</h3>
+            <ul class="safety-list">
+              <li>Hard cap: 100 lines per response.</li>
+              <li>Cooldown enforced to protect clusters.</li>
+              <li>Local-only auth storage with encryption.</li>
+            </ul>
+          </section>
         </div>
       </section>
-
-      <section class="chat" id="chat"></section>
     </main>
 
     <script src="app.js"></script>
